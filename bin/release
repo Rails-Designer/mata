@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+VERSION=$1
+
+if [ -z "$VERSION" ]; then
+  echo "Error: Version number or bump type is required."
+  echo "Usage: $0 <major|minor|patch|version-number>"
+
+  exit 1
+fi
+
+if [[ "$VERSION" =~ ^(major|minor|patch)$ ]]; then
+  CURRENT=$(grep -o '"[^"]*"' ./lib/mata/version.rb | tr -d '"')
+  IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT"
+
+  case $VERSION in
+    major) VERSION="$((MAJOR + 1)).0.0" ;;
+    minor) VERSION="$MAJOR.$((MINOR + 1)).0" ;;
+    patch) VERSION="$MAJOR.$MINOR.$((PATCH + 1))" ;;
+  esac
+fi
+
+printf "module Mata\n  VERSION = \"$VERSION\"\nend\n" > ./lib/mata/version.rb
+
+bundle
+
+git add Gemfile.lock lib/mata/version.rb
+git commit -m "Bump version for $VERSION"
+git push
+git tag v$VERSION
+git push --tags
+
+bundle exec rake build
+gem push "pkg/mata-$VERSION.gem"
