@@ -1,3 +1,3 @@
-module Mata
+class Mata
   VERSION = "0.5.0"
 end

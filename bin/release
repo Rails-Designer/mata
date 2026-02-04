@@ -20,7 +20,7 @@ if [[ "$VERSION" =~ ^(major|minor|patch)$ ]]; then
   esac
 fi
 
-printf "module Mata\n  VERSION = \"$VERSION\"\nend\n" > ./lib/mata/version.rb
+printf "class Mata\n  VERSION = \"$VERSION\"\nend\n" > ./lib/mata/version.rb
 
 bundle
 
