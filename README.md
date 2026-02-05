@@ -37,30 +37,7 @@ Rails.application.configure do
 end
 ```
 
-### Sinatra
-
-```ruby
-require "sinatra"
-require "mata"
-
-configure :development do
-  use Mata, watch: %w[views public]
-end
-```
-
-### Hanami
-
-```ruby
-# config.ru
-require "hanami/boot"
-require "mata"
-
-use Mata, watch: %w[apps lib] if Hanami.env?(:development)
-
-run Hanami.app
-```
-
-### Basic Rack app
+### Other rack-based apps
 
 ```ruby
 # config.ru
@@ -70,6 +47,9 @@ use Mata, watch: %w[views assets], skip: %w[tmp log]
 
 run YourApp
 ```
+
+> [!NOTE]
+> Do share your snippets on how to add Mata into your Rack-based apps 💙
 
 
 ## Options
