@@ -1,6 +1,6 @@
 # Mata
 
-Hot module reloading for Rack applications using Server-Sent Events and DOM morphing.
+Live Reload with DOM Morphing for Rack applications using Server-Sent Events.
 
 
 **Sponsored By [Rails Designer](https://railsdesigner.com/)**
@@ -17,7 +17,7 @@ Hot module reloading for Rack applications using Server-Sent Events and DOM morp
 ## Installation
 
 ```ruby
-gem "mata"
+bundle add mata --group=development
 ```
 
 
@@ -60,12 +60,12 @@ run YourApp
 
 ## Used in
 
-This gem powers hot reloading in [Perron](https://github.com/rails-designer/perron), a Rails-based static site generator. It can be enabled with `config.hrm = true` in your Perron initializer.
+This gem powers live reloading in [Perron](https://github.com/rails-designer/perron), a Rails-based static site generator. It can be enabled with `config.live_reload = true` in your Perron initializer.
 
 
 ## Why this gem?
 
-I needed hot module reloading for Perron-powered Rails applications. These are minimal Rails apps typically without Hotwire or ActionCable dependencies. Existing solutions either required ActionCable (adding unnecessary complexity) or provided only basic full-page reloads without state preservation.
+I needed a way to reload pages for Perron-powered Rails applications. These are minimal Rails apps typically without Hotwire or ActionCable dependencies. Existing solutions either required ActionCable or provided only basic full-page reloads without state preservation.
 
 
 ## Who is Mata?
