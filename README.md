@@ -20,22 +20,19 @@ Live Reload with DOM Morphing for Rack applications using Server-Sent Events.
 bundle add mata --group=development
 ```
 
-
 ## Usage
 
 ### Rails
 
+Mata automatically sets up middleware in development with sensible defaults. You can optionally configure:
 ```ruby
-# config/environments/development.rb
-Rails.application.configure do
-  config.middleware.insert_before(
-    ActionDispatch::Static,
-    Mata,
-    watch: %w[app/views app/assets],
-    skip: %w[tmp log node_modules]
-  )
+# config/initializers/mata.rb
+Mata::Railtie.configure do |config|
+  config.watch_paths = %w[app]
+  config.skip_paths = %w[app/assets/builds app/assets/cache]
 end
 ```
+
 
 ### Other rack-based apps
 
@@ -43,19 +40,13 @@ end
 # config.ru
 require "mata"
 
-use Mata, watch: %w[views assets], skip: %w[tmp log]
+use Mata, watch: %w[views assets], skip: %w[views/tmp]
 
 run YourApp
 ```
 
 > [!NOTE]
-> Do share your snippets on how to add Mata into your Rack-based apps 💙
-
-
-## Options
-
-- **watch**; array of paths to monitor (default: []`)
-- **skip**; array of paths to ignore (default: `[]`)
+> Do share your snippets on how to add Mata into your specific Rack-based apps 💙
 
 
 ## Used in
