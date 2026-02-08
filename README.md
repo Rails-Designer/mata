@@ -24,13 +24,14 @@ bundle add mata --group=development
 
 ### Rails
 
-Mata automatically sets up middleware in development with sensible defaults. You can optionally configure:
 ```ruby
-# config/initializers/mata.rb
-Mata::Railtie.configure do |config|
-  config.watch_paths = %w[app]
-  config.skip_paths = %w[app/assets/builds app/assets/cache]
-end
+# config/environments/development.rb
+config.middleware.insert_before(
+  ActionDispatch::Static,
+  Mata,
+  watch: %w[app/views app/assets],
+  skip: %w[app/assets/build]
+)
 ```
 
 
