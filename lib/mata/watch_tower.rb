@@ -3,8 +3,8 @@
 class Mata
   class WatchTower
     def initialize(options)
-      @watch_paths = Array(options[:watch] || %w[app views assets])
-      @skip_paths = skipped_patterns(options[:skip] || options[:ignore] || %w[tmp log])
+      @watch_paths = Array(options[:watch] || [])
+      @skip_paths = skipped_patterns(options[:skip] || options[:ignore] || [])
       @on_change = nil
       @listener = nil
 

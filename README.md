@@ -54,8 +54,8 @@ run YourApp
 
 ## Options
 
-- **watch**; array of paths to monitor (default: `%w[app views assets]`)
-- **skip**; array of paths to ignore (default: `%w[tmp log]`)
+- **watch**; array of paths to monitor (default: []`)
+- **skip**; array of paths to ignore (default: `[]`)
 
 
 ## Used in
