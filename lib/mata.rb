@@ -6,11 +6,12 @@ require "json"
 require "mata/agent"
 require "mata/broadcaster"
 require "mata/watch_tower"
-require "mata/railtie" if defined?(Rails::Railtie)
 
 class Mata
   def initialize(app, options = {})
     @app = app
+
+    return if ENV["MATA_DISABLED"] == "true"
 
     @watch_tower = WatchTower.new(options)
     @broadcaster = Broadcaster.new
