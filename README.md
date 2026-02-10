@@ -3,6 +3,9 @@
 Live Reload with DOM Morphing for Rack applications using Server-Sent Events.
 
 
+https://github.com/user-attachments/assets/c06a5dbd-42e1-45f3-b514-97d3f9e53077
+
+
 **Sponsored By [Rails Designer](https://railsdesigner.com/)**
 
 <a href="https://railsdesigner.com/" target="_blank">
