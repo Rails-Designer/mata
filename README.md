@@ -1,6 +1,6 @@
 # Mata
 
-Live Reload with DOM Morphing for Rack applications using Server-Sent Events.
+Live Reload with DOM Morphing for Rack applications using Server-Sent Events (SSE).
 
 
 https://github.com/user-attachments/assets/c06a5dbd-42e1-45f3-b514-97d3f9e53077
@@ -60,7 +60,7 @@ This gem powers live reloading in [Perron](https://github.com/rails-designer/per
 
 ## Why this gem?
 
-I needed a way to reload pages for Perron-powered Rails applications. These are minimal Rails apps typically without Hotwire or ActionCable dependencies. Existing solutions either required ActionCable or provided only basic full-page reloads without state preservation.
+I needed a way to reload pages for Perron-powered Rails applications. These are minimal Rails apps typically without Hotwire or ActionCable dependencies. Existing solutions either required ActionCable or provided only basic full-page reloads without state preservation. So I built a light-weight gem that uses SSE and idiomorph for a smooth developer experience. Not just specific for Perron but for any Rack-based Ruby app. ❤️
 
 
 ## Who is Mata?
