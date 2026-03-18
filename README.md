@@ -5,7 +5,6 @@ Live Reload with DOM Morphing for Rack applications using Server-Sent Events (SS
 
 https://github.com/user-attachments/assets/c06a5dbd-42e1-45f3-b514-97d3f9e53077
 
-
 **Sponsored By [Rails Designer](https://railsdesigner.com/)**
 
 <a href="https://railsdesigner.com/" target="_blank">
@@ -39,7 +38,6 @@ config.middleware.insert_before(
 
 
 ### Other rack-based apps
-
 ```ruby
 # config.ru
 require "mata"
@@ -52,6 +50,43 @@ run YourApp
 > [!NOTE]
 > Do share your snippets on how to add Mata into your specific Rack-based apps 💙
 
+
+### Hanami
+```ruby
+# config.ru
+require "mata"
+
+require_relative "config/app"
+require_relative "config/routes"
+
+use Mata, watch: %w[app/templates app/views app/actions], skip: %w[tmp logs node_modules]
+
+run Hanami.app
+```
+
+### Sinatra
+```ruby
+# config.ru
+require "mata"
+require "./app"
+
+use Mata, watch: %w[views templates assets], skip: %w[tmp vendor]
+
+run Sinatra::Application
+```
+
+### Roda
+```ruby
+# config.ru
+require "mata"
+require "./app"
+
+use Mata, watch: %w[templates assets], skip: %w[tmp]
+
+route do |r|
+  r.on { r.root { view("index") } }
+end
+```
 
 ## Used in
 
