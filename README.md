@@ -2,8 +2,7 @@
 
 Live Reload with DOM Morphing for Rack applications using Server-Sent Events (SSE).
 
-
-https://github.com/user-attachments/assets/c06a5dbd-42e1-45f3-b514-97d3f9e53077
+<img src="https://raw.githubusercontent.com/Rails-Designer/mata/HEAD/.github/mata-preview.gif">
 
 **Sponsored By [Rails Designer](https://railsdesigner.com/)**
 
