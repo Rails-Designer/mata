@@ -12,7 +12,7 @@ class TestBroadcaster < Minitest::Test
     status, headers, body = @broadcaster.deliver_payload
 
     assert_equal 200, status
-    assert_equal "application/javascript", headers["Content-Type"]
+    assert_equal "application/javascript", headers["content-type"]
     assert_includes body.first, "Idiomorph"
     assert_includes body.first, "initMata"
   end
@@ -22,9 +22,9 @@ class TestBroadcaster < Minitest::Test
     status, headers, _ = @broadcaster.establish_contact(env)
 
     assert_equal 200, status
-    assert_equal "text/event-stream", headers["Content-Type"]
-    assert_equal "no-cache", headers["Cache-Control"]
-    assert_equal "keep-alive", headers["Connection"]
+    assert_equal "text/event-stream", headers["content-type"]
+    assert_equal "no-cache", headers["cache-control"]
+    assert_equal "keep-alive", headers["connection"]
   end
 
   def test_rejects_non_get_sse_requests
