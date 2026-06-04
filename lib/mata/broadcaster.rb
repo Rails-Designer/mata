@@ -14,10 +14,10 @@ class Mata
       end
 
       headers = {
-        "Content-Type" => "text/event-stream",
-        "Cache-Control" => "no-cache",
-        "Connection" => "keep-alive",
-        "Access-Control-Allow-Origin" => "*"
+        "content-type" => "text/event-stream",
+        "cache-control" => "no-cache",
+        "connection" => "keep-alive",
+        "access-control-allow-origin" => "*"
       }
 
       [200, headers, proc { |stream|
@@ -45,7 +45,7 @@ class Mata
 
       script = "#{idiomorph_js}\n\n#{client_js}"
 
-      [200, {"Content-Type" => "application/javascript"}, [script]]
+      [200, {"content-type" => "application/javascript"}, [script]]
     end
 
     def broadcast_to_all(files)
