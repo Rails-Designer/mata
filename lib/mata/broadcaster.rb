@@ -27,12 +27,6 @@ class Mata
 
         begin
           stream << "data: {\"type\":\"connected\"}\n\n"
-
-          Thread.new do
-            loop { sleep 30 }
-          rescue
-            @clients_mutex.synchronize { @clients.delete(stream) }
-          end
         rescue
           @clients_mutex.synchronize { @clients.delete(stream) }
         end
@@ -87,6 +81,7 @@ class Mata
       @clients_mutex.synchronize do
         @clients.reject! do |client|
           client << ""
+
           false
         rescue
           true
