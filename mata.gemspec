@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors = ["Rails Designer"]
   spec.email = ["devs@railsdesigner.com"]
 
-  spec.homepage = "https://railsdesigner.com/mata/"
+  spec.homepage = "https://railsdesigner.com/open-source/mata/"
   spec.license = "MIT"
 
   spec.metadata["homepage_uri"] = spec.homepage
