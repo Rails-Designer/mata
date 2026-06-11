@@ -46,15 +46,13 @@ class Mata
       clients_copy = @clients_mutex.synchronize { @clients.dup }
       return if clients_copy.empty?
 
-      files.each do |file|
-        event_data = {type: "reload"}
-        message = "data: #{event_data.to_json}\n\n"
+      event_data = {type: "reload", files: files}
+      message = "data: #{event_data.to_json}\n\n"
 
-        clients_copy.each do |stream|
-          stream << message
-        rescue
-          @clients_mutex.synchronize { @clients.delete(stream) }
-        end
+      clients_copy.each do |stream|
+        stream << message
+      rescue
+        @clients_mutex.synchronize { @clients.delete(stream) }
       end
     end
 
