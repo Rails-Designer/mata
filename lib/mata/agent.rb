@@ -26,7 +26,7 @@ class Mata
 
     def extract(body)
       if body.respond_to?(:each)
-        body.each.to_a.join
+        [].tap { |parts| body.each { |part| parts << part } }.join
       else
         body.to_s
       end
