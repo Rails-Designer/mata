@@ -2,13 +2,21 @@
 
 class Mata
   class Agent
+    def initialize(options = {})
+      @retry = options[:retry]
+    end
+
     def insert(status, headers, body)
       return [status, headers, body] unless html_response?(headers)
 
       content = extract(body)
       return [status, headers, [content]] unless content.include?("</head>")
 
-      script_tag = '<script src="/__mata/client.js"></script>'
+      script_tag = if @retry
+        %(<script src="/__mata/client.js" data-mata-retry="#{@retry}"></script>)
+      else
+        '<script src="/__mata/client.js"></script>'
+      end
       modified_content = content.sub("</head>", "#{script_tag}\n</head>")
 
       headers["Content-Length"] = modified_content.bytesize.to_s if headers["Content-Length"]
