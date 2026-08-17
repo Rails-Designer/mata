@@ -5,6 +5,7 @@ class Mata
     def initialize(options)
       @watch_paths = Array(options[:watch] || [])
       @skip_paths = skipped_patterns(options[:skip] || options[:ignore] || [])
+      @debounce = options[:debounce] || 300
       @on_change = nil
       @listener = nil
 
@@ -42,8 +43,9 @@ class Mata
         @last_change_time = Time.now
 
         Thread.new do
-          sleep 0.15
-          if Time.now - @last_change_time >= 0.15
+          sleep(@debounce / 1000.0)
+
+          if Time.now - @last_change_time >= (@debounce / 1000.0)
             @on_change&.call(modified + added + removed)
           end
         end

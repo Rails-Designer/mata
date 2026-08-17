@@ -27,6 +27,27 @@ class TestBroadcaster < Minitest::Test
     assert_equal "keep-alive", headers["connection"]
   end
 
+  def test_sends_retry_directive_when_configured
+    broadcaster = Mata::Broadcaster.new(retry: 3000)
+    env = {"REQUEST_METHOD" => "GET"}
+    _, _, stream_proc = broadcaster.establish_contact(env)
+
+    output = ""
+    stream_proc.call(output)
+
+    assert_includes output, "retry: 3000\n\n"
+  end
+
+  def test_omits_retry_directive_when_not_configured
+    env = {"REQUEST_METHOD" => "GET"}
+    _, _, stream_proc = @broadcaster.establish_contact(env)
+
+    output = ""
+    stream_proc.call(output)
+
+    refute_includes output, "retry:"
+  end
+
   def test_rejects_non_get_sse_requests
     env = {"REQUEST_METHOD" => "POST"}
     status, _, _ = @broadcaster.establish_contact(env)

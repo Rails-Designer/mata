@@ -14,8 +14,8 @@ class Mata
     return if ENV["MATA_DISABLED"] == "true"
 
     @watch_tower = WatchTower.new(options)
-    @broadcaster = Broadcaster.new
-    @agent = Agent.new
+    @broadcaster = Broadcaster.new(options)
+    @agent = Agent.new(options)
 
     @watch_tower.on_change { |files| @broadcaster.broadcast_to_all(files) }
 
