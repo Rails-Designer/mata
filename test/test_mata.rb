@@ -8,7 +8,7 @@ class TestMata < Minitest::Test
     setup_temp_directory
 
     @app = lambda { |env| [200, {"Content-Type" => "text/html"}, ["<html><head></head><body>Hello</body></html>"]] }
-    @mata = Mata.new(@app, watch: [@temp_dir], skip: ["tmp"])
+    @mata = Mata.new(@app, watch: [@watch_dir], skip: ["tmp"], debounce: 300, retry: 3000)
   end
 
   def teardown
@@ -24,7 +24,7 @@ class TestMata < Minitest::Test
   def test_injects_script_into_html_responses
     get "/"
 
-    assert_includes last_response.body, '<script src="/__mata/client.js"></script>'
+    assert_includes last_response.body, '<script src="/__mata/client.js" data-mata-retry="3000"></script>'
   end
 
   def test_serves_client_script
@@ -46,6 +46,6 @@ class TestMata < Minitest::Test
     get "/other"
 
     assert_includes last_response.body, "Hello"
-    assert_includes last_response.body, '<script src="/__mata/client.js"></script>'
+    assert_includes last_response.body, '<script src="/__mata/client.js" data-mata-retry="3000"></script>'
   end
 end

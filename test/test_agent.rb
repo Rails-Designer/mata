@@ -17,6 +17,14 @@ class TestAgent < Minitest::Test
     assert_includes body.first, "</head>"
   end
 
+  def test_injects_data_attributes_when_retry_is_set
+    agent = Mata::Agent.new(retry: 5000)
+    html = "<html><head></head><body>Content</body></html>"
+    _, _, body = agent.insert(200, {"Content-Type" => "text/html"}, [html])
+
+    assert_includes body.first, 'data-mata-retry="5000"'
+  end
+
   def test_skips_non_html_responses
     json = '{"data": "value"}'
     _, _, body = @agent.insert(200, {"Content-Type" => "application/json"}, [json])

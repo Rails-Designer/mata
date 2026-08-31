@@ -5,8 +5,8 @@ class TestWatchTower < Minitest::Test
   include TestHelpers
 
   def setup
-    @temp_dir = Dir.mktmpdir
-    @watch_tower = Mata::WatchTower.new(watch: [@temp_dir])
+    @watch_dir = Dir.mktmpdir
+    @watch_tower = Mata::WatchTower.new(watch: [@watch_dir])
     @changes = []
 
     @watch_tower.on_change { |files| @changes.concat(files) }
@@ -15,7 +15,15 @@ class TestWatchTower < Minitest::Test
   def teardown
     @watch_tower.shutdown
 
-    FileUtils.rm_rf(@temp_dir)
+    FileUtils.rm_rf(@watch_dir)
+  end
+
+  def test_accepts_custom_debounce
+    watch_tower = Mata::WatchTower.new(watch: [@watch_dir], debounce: 500)
+
+    assert_equal 500, watch_tower.instance_variable_get(:@debounce)
+  ensure
+    watch_tower.shutdown
   end
 
   def test_on_change_callback_fires

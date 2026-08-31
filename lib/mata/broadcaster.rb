@@ -2,9 +2,10 @@
 
 class Mata
   class Broadcaster
-    def initialize
+    def initialize(options = {})
       @clients = []
       @clients_mutex = Mutex.new
+      @retry = options[:retry]
       @cleanup_thread = cleanup_periodically
     end
 
@@ -26,6 +27,7 @@ class Mata
         end
 
         begin
+          stream << "retry: #{@retry}\n\n" if @retry
           stream << "data: {\"type\":\"connected\"}\n\n"
         rescue
           @clients_mutex.synchronize { @clients.delete(stream) }

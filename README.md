@@ -87,6 +87,19 @@ route do |r|
 end
 ```
 
+
+### Options
+
+All options are optional.
+
+| Option | Default | Type | Description |
+|---|---|---|---|
+| `watch` | `[]` | Array of String | Directories to watch for changes |
+| `skip` | `[]` | Array of String/Regexp | Paths to ignore |
+| `debounce` | `300` | Integer | Debounce interval in milliseconds before broadcasting changes |
+| `retry` | not set | Integer | SSE retry interval in milliseconds (not set = browser default ~3s, maximum clamped at 30s) |
+
+
 ## Used in
 
 This gem powers live reloading in [Perron](https://github.com/rails-designer/perron), a Rails-based static site generator. It can be enabled with `config.live_reload = true` in your Perron initializer.
