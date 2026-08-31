@@ -96,6 +96,7 @@ All options are optional.
 | `debounce` | `300` | Integer | Debounce interval in milliseconds before broadcasting changes |
 | `retry` | not set | Integer | SSE retry interval in milliseconds (not set = browser default ~3s, maximum clamped at 30s) |
 | `log_level` | `:verbose` | Symbol | `:verbose` shows all console messages; `:silent` suppresses them in the browser console (`[Mata] Connected with DOM morphing`, etc.) |
+| `idiomorph_options` | `nil` | String | A raw JS object literal passed **verbatim** as the `options` argument to [`Idiomorph.morph`](https://github.com/bigskysoftware/idiomorph#options), fully replacing Mata's built-in defaults. Example: `idiomorph_options: '{ morphStyle: "innerHTML" }'` |
 
 
 ## Used in
