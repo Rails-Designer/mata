@@ -17,6 +17,30 @@ class TestBroadcaster < Minitest::Test
     assert_includes body.first, "initMata"
   end
 
+  def test_injects_default_idiomorph_options_when_unset
+    _, _, body = Mata::Broadcaster.new.deliver_payload
+
+    assert_includes body.first, "ignoreActiveValue: true"
+    refute_includes body.first, "__MATA_IDIOMORPH_OPTIONS__"
+  end
+
+  def test_injects_custom_idiomorph_options
+    broadcaster = Mata::Broadcaster.new(idiomorph_options: '{ morphStyle: "innerHTML" }')
+    _, _, body = broadcaster.deliver_payload
+
+    assert_includes body.first, 'morphStyle: "innerHTML"'
+    refute_includes body.first, "__MATA_IDIOMORPH_OPTIONS__"
+    refute_includes body.first, "ignoreActiveValue: true"
+  end
+
+  def test_rejects_non_string_idiomorph_options
+    broadcaster = Mata::Broadcaster.new(idiomorph_options: {morphStyle: "innerHTML"})
+
+    assert_raises(ArgumentError) do
+      broadcaster.deliver_payload
+    end
+  end
+
   def test_handles_sse_connection
     env = {"REQUEST_METHOD" => "GET"}
     status, headers, _ = @broadcaster.establish_contact(env)

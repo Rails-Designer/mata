@@ -2,10 +2,26 @@
 
 class Mata
   class Broadcaster
+    DEFAULT_IDIOMORPH_OPTIONS = <<~JS
+      {
+        ignoreActiveValue: true,
+        callbacks: {
+          beforeNodeMorphed: function(oldNode, _) {
+            if (oldNode.tagName && oldNode.tagName.includes("-")) {
+              return false;
+            }
+
+            return true;
+          }
+        }
+      }
+    JS
+
     def initialize(options = {})
       @clients = []
       @clients_mutex = Mutex.new
       @retry = options[:retry]
+      @idiomorph_options = options[:idiomorph_options]
       @cleanup_thread = cleanup_periodically
     end
 
@@ -36,8 +52,12 @@ class Mata
     end
 
     def deliver_payload
+      raise ArgumentError, "idiomorph_options must be a String containing a raw JS object literal" if @idiomorph_options && !@idiomorph_options.is_a?(String)
+
       idiomorph_js = File.read(File.join(__dir__, "idiomorph.min.js"))
       client_js = File.read(File.join(__dir__, "client.js"))
+
+      client_js = client_js.gsub("__MATA_IDIOMORPH_OPTIONS__", @idiomorph_options || DEFAULT_IDIOMORPH_OPTIONS)
 
       script = "#{idiomorph_js}\n\n#{client_js}"
 
