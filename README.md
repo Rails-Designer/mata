@@ -10,6 +10,7 @@ Live Reload with DOM Morphing for Rack applications using Server-Sent Events (SS
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Rails-Designer/mata/HEAD/.github/logo-dark.svg">
     <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Rails-Designer/mata/HEAD/.github/logo-light.svg">
+
     <img alt="Rails Designer" src="https://raw.githubusercontent.com/Rails-Designer/mata/HEAD/.github/logo-light.svg" width="240" style="max-width: 100%;">
   </picture>
 </a>
@@ -34,20 +35,6 @@ config.middleware.insert_before(
   skip: %w[app/assets/build]
 )
 ```
-
-
-### Other rack-based apps
-```ruby
-# config.ru
-require "mata"
-
-use Mata, watch: %w[views assets], skip: %w[views/tmp]
-
-run YourApp
-```
-
-> [!NOTE]
-> Do share your snippets on how to add Mata into your specific Rack-based apps 💙
 
 
 ### Hanami
@@ -87,6 +74,16 @@ route do |r|
 end
 ```
 
+### Other rack-based apps
+```ruby
+# config.ru
+require "mata"
+
+use Mata, watch: %w[views assets], skip: %w[views/tmp]
+
+run YourApp
+```
+
 
 ### Options
 
@@ -98,6 +95,7 @@ All options are optional.
 | `skip` | `[]` | Array of String/Regexp | Paths to ignore |
 | `debounce` | `300` | Integer | Debounce interval in milliseconds before broadcasting changes |
 | `retry` | not set | Integer | SSE retry interval in milliseconds (not set = browser default ~3s, maximum clamped at 30s) |
+| `log_level` | `:verbose` | Symbol | `:verbose` shows all console messages; `:silent` suppresses them in the browser console (`[Mata] Connected with DOM morphing`, etc.) |
 
 
 ## Used in
