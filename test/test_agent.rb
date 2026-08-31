@@ -25,6 +25,21 @@ class TestAgent < Minitest::Test
     assert_includes body.first, 'data-mata-retry="5000"'
   end
 
+  def test_injects_data_attribute_when_log_level_is_set
+    agent = Mata::Agent.new(log_level: :silent)
+    html = "<html><head></head><body>Content</body></html>"
+    _, _, body = agent.insert(200, {"Content-Type" => "text/html"}, [html])
+
+    assert_includes body.first, 'data-mata-log-level="silent"'
+  end
+
+  def test_does_not_inject_log_level_attribute_by_default
+    html = "<html><head></head><body>Content</body></html>"
+    _, _, body = @agent.insert(200, {"Content-Type" => "text/html"}, [html])
+
+    refute_includes body.first, "data-mata-log-level"
+  end
+
   def test_skips_non_html_responses
     json = '{"data": "value"}'
     _, _, body = @agent.insert(200, {"Content-Type" => "application/json"}, [json])

@@ -27,6 +27,13 @@ class TestMata < Minitest::Test
     assert_includes last_response.body, '<script src="/__mata/client.js" data-mata-retry="3000"></script>'
   end
 
+  def test_injects_log_level_attribute_when_set
+    @mata = Mata.new(@app, watch: [@watch_dir], skip: ["tmp"], debounce: 300, retry: 3000, log_level: :silent)
+    get "/"
+
+    assert_includes last_response.body, 'data-mata-log-level="silent"'
+  end
+
   def test_serves_client_script
     get "/__mata/client.js"
 
