@@ -19,7 +19,8 @@ class Mata
       script_tag += "></script>"
       modified_content = content.sub("</head>", "#{script_tag}\n</head>")
 
-      headers["Content-Length"] = modified_content.bytesize.to_s if headers["Content-Length"]
+      length_header = headers.keys.find { it.to_s.casecmp?("content-length") }
+      headers[length_header] = modified_content.bytesize.to_s if length_header
 
       [status, headers, [modified_content]]
     end
@@ -32,12 +33,16 @@ class Mata
       content_type&.include?("text/html")
     end
 
+    # The original body is replaced, so it's closed here as the Rack spec asks:
+    # that releases a file body and runs Rack::BodyProxy callbacks.
     def extract(body)
       if body.respond_to?(:each)
         [].tap { |parts| body.each { |part| parts << part } }.join
       else
         body.to_s
       end
+    ensure
+      body.close if body.respond_to?(:close)
     end
   end
 end
