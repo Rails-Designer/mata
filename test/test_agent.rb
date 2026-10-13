@@ -1,4 +1,5 @@
 require_relative "test_helper"
+require "rack/body_proxy"
 
 class TestAgent < Minitest::Test
   include Rack::Test::Methods
@@ -61,6 +62,26 @@ class TestAgent < Minitest::Test
     refute_equal "39", headers["Content-Length"]
 
     assert headers["Content-Length"].to_i > 39
+  end
+
+  def test_updates_lowercase_content_length_header
+    html = "<html><head></head><body></body></html>"
+
+    _, headers, body = @agent.insert(200, {"content-type" => "text/html", "content-length" => "39"}, [html])
+
+    assert_equal body.first.bytesize.to_s, headers["content-length"]
+    refute headers.key?("Content-Length")
+  end
+
+  def test_closes_the_original_body
+    closed = []
+    html = Rack::BodyProxy.new(["<html><head></head><body></body></html>"]) { closed << :html }
+    json = Rack::BodyProxy.new(['{"data": "value"}']) { closed << :json }
+
+    @agent.insert(200, {"content-type" => "text/html"}, html)
+    @agent.insert(200, {"content-type" => "application/json"}, json)
+
+    assert_equal [:html], closed
   end
 
   def test_handles_chunked_body
