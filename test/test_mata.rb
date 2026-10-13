@@ -34,6 +34,18 @@ class TestMata < Minitest::Test
     assert_includes last_response.body, 'data-mata-log-level="silent"'
   end
 
+  def test_passes_requests_through_when_disabled
+    ENV["MATA_DISABLED"] = "true"
+    @mata = Mata.new(@app, watch: [@watch_dir])
+
+    get "/"
+
+    assert_equal 200, last_response.status
+    assert_equal "<html><head></head><body>Hello</body></html>", last_response.body
+  ensure
+    ENV.delete("MATA_DISABLED")
+  end
+
   def test_serves_client_script
     get "/__mata/client.js"
 
