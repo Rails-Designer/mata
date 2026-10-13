@@ -23,6 +23,8 @@ class Mata
   end
 
   def call(environment)
+    return @app.call(environment) if @agent.nil?
+
     request = Rack::Request.new(environment)
 
     case request.path
