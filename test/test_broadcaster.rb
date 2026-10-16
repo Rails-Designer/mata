@@ -1,4 +1,5 @@
 require_relative "test_helper"
+require "socket"
 
 class TestBroadcaster < Minitest::Test
   include Rack::Test::Methods
@@ -82,6 +83,43 @@ class TestBroadcaster < Minitest::Test
   def test_broadcast_to_all_with_no_clients
     # Should not raise error
     @broadcaster.broadcast_to_all(["file.txt"])
+  end
+
+  def test_cleanup_closes_clients_that_went_away
+    stream, browser = UNIXSocket.pair
+    _, _, stream_proc = @broadcaster.establish_contact({"REQUEST_METHOD" => "GET"})
+    stream_proc.call(stream)
+
+    browser.close
+    @broadcaster.send(:cleanup_dead_clients)
+
+    assert stream.closed?
+    assert_empty @broadcaster.instance_variable_get(:@clients)
+  end
+
+  def test_cleanup_keeps_live_clients
+    stream, browser = UNIXSocket.pair
+    _, _, stream_proc = @broadcaster.establish_contact({"REQUEST_METHOD" => "GET"})
+    stream_proc.call(stream)
+
+    @broadcaster.send(:cleanup_dead_clients)
+
+    refute stream.closed?
+    assert_includes browser.read_nonblock(1024), ":\n\n"
+  ensure
+    browser&.close
+  end
+
+  def test_broadcast_closes_clients_that_went_away
+    stream, browser = UNIXSocket.pair
+    _, _, stream_proc = @broadcaster.establish_contact({"REQUEST_METHOD" => "GET"})
+    stream_proc.call(stream)
+
+    browser.close
+    @broadcaster.broadcast_to_all(["file.txt"])
+
+    assert stream.closed?
+    assert_empty @broadcaster.instance_variable_get(:@clients)
   end
 
   def test_stand_down_cleans_up
