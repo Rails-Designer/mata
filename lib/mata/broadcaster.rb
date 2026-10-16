@@ -17,6 +17,8 @@ class Mata
       }
     JS
 
+    HEARTBEAT_INTERVAL = 15
+
     def initialize(options = {})
       @clients = []
       @clients_mutex = Mutex.new
@@ -75,6 +77,8 @@ class Mata
         stream << message
       rescue
         @clients_mutex.synchronize { @clients.delete(stream) }
+
+        hang_up(stream)
       end
     end
 
@@ -89,7 +93,7 @@ class Mata
     def cleanup_periodically
       Thread.new do
         loop do
-          sleep 60
+          sleep HEARTBEAT_INTERVAL
 
           cleanup_dead_clients
         end
@@ -100,13 +104,22 @@ class Mata
     def cleanup_dead_clients
       @clients_mutex.synchronize do
         @clients.reject! do |client|
-          client << ""
+          # an SSE comment; writing nothing never notices a closed tab
+          client << ":\n\n"
 
           false
         rescue
+          hang_up(client)
+
           true
         end
       end
+    end
+
+    def hang_up(stream)
+      stream.close
+    rescue
+      nil
     end
   end
 end
